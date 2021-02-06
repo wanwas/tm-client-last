@@ -1,11 +1,11 @@
 import Router from "vue-router";
 
-import DefaultLayout from "@/layouts/Default"
-import MainLayout from "@/layouts/Main"
+import DefaultLayout from "@/layouts/Default";
+import MainLayout from "@/layouts/Main";
 
 const routes = [
   {
-    path: '/',
+    path: "/",
     component: DefaultLayout,
     children: [
       {
@@ -23,13 +23,18 @@ const routes = [
         path: "/auth/:resetToken",
         component: () => import("@/views/Auth"),
       },
-    ]
+    ],
   },
   {
-    path: '/main',
+    path: "/main",
     component: MainLayout,
-    children: []
-  }
+    children: [
+      {
+        path: "tasks",
+        component: () => import("@/views/Tasks"),
+      },
+    ],
+  },
 ];
 
 const router = new Router({
