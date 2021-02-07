@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="form-auth d-flex flex-column justify-space-between align-center pa-15"
-  >
+  <div class="form-auth d-flex flex-column justify-space-between align-center pa-15">
     <h2 class="headline">Сброс пароля</h2>
 
     <div class="form-error error--text">

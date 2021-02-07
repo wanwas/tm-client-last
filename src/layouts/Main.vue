@@ -10,9 +10,21 @@
 <script>
 import Header from "@/components/Header";
 
+import { mapActions } from "vuex";
+
 export default {
   components: {
     Header,
+  },
+
+  methods: {
+    ...mapActions({
+      initTasks: "tasks/initTasks", //also supports payload `this.nameOfAction(amount)`
+    }),
+  },
+
+  mounted() {
+    this.initTasks();
   },
 };
 </script>
@@ -24,6 +36,9 @@ export default {
 }
 .wrapper-container {
   width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: calc(100vh - 60px);
 }
 </style>

@@ -33,6 +33,10 @@ const routes = [
         path: "tasks",
         component: () => import("@/views/Tasks"),
       },
+      {
+        path: "archive",
+        component: () => import("@/views/Archive"),
+      },
     ],
   },
 ];

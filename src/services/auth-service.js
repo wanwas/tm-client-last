@@ -5,7 +5,6 @@ function loginRequest(data) {
 }
 
 function registerRequest(data) {
-  console.log(data);
   return postRequestToApi("http://localhost:5000/auth/register", data);
 }
 

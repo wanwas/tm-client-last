@@ -27,4 +27,14 @@ async function postRequestToApi(
   });
 }
 
-export { postRequestToApi };
+function getMessage(e) {
+  console.log(e);
+  const messages = {
+    "auth/user-not-found": "Пользователь с таким email не найден",
+    "auth/wrong-password": "Email или Пароль не верные",
+    "auth/email-already-in-use": "Введеный Вами email уже зарегестрирован",
+  };
+  return messages[e] || "Ошибка, что-то пошло не так";
+}
+
+export { postRequestToApi, getMessage };

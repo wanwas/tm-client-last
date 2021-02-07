@@ -1,6 +1,6 @@
-import * as auth from "@/services/auth-service.js";
+import firebase from "firebase/app";
 
-import $router from "@/router/";
+import { getMessage } from "@/utils";
 
 export default {
   namespaced: true,
@@ -10,46 +10,49 @@ export default {
   },
 
   actions: {
-    async login({ commit }, user) {
+    async login(ctx, user) {
       try {
-        const data = await auth.loginRequest(user);
-        commit("userUpdated", data);
-        localStorage.setItem("user", JSON.stringify(data));
+        await firebase
+          .auth()
+          .signInWithEmailAndPassword(user.email, user.password);
       } catch (e) {
-        return Promise.reject(e);
-      }
-    },
-    async register(ctx, user) {
-      try {
-        await auth.registerRequest(user);
-      } catch (e) {
-        return Promise.reject(e);
-      }
-    },
-    async forgot(ctx, user) {
-      try {
-        await auth.forgotRequest(user);
-      } catch (e) {
-        return Promise.reject(e);
+        return Promise.reject(getMessage(e.code));
       }
     },
 
-    async reset(ctx, user) {
+    async register({ dispatch }, user) {
       try {
-        await auth.resetRequest(user);
+        await firebase
+          .auth()
+          .createUserWithEmailAndPassword(user.email, user.password);
+        const uid = await dispatch("getUid");
+        await firebase
+          .database()
+          .ref(`users/${uid}/info`)
+          .set({
+            name: user.name,
+            surname: user.surname,
+            patronymic: user.patronymic,
+            status: user.status,
+            email: user.email,
+            admin: false,
+          });
       } catch (e) {
-        return Promise.reject(e);
+        return Promise.reject(getMessage(e.code));
       }
     },
 
-    logout(ctx) {
-      ctx.commit("userUpdated", {});
-      localStorage.removeItem("user");
-      $router.push("/auth");
+    getUid() {
+      const user = firebase.auth().currentUser;
+      return user ? user.uid : null;
+    },
+
+    async logout() {
+      await firebase.auth().signOut();
     },
   },
 
-  mutations: {
+  mutations: {  
     userUpdated(state, newUser) {
       state.user = newUser;
     },

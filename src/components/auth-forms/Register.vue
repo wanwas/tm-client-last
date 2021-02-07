@@ -94,7 +94,7 @@
         tile
         :loading="loading"
         @click="submit"
-        >Изменить пароль</v-btn
+        >Зарегистрироваться</v-btn
       >
     </form>
     <div class="form-control mt-3">
@@ -202,7 +202,7 @@ export default {
     }),
 
     async submit() {
-      this.loadingSwitch();
+      this.loading = true;
       this.$v.$touch();
       if (!this.$v.$invalid) {
         const user = {
@@ -226,11 +226,7 @@ export default {
             this.errorMessage = e;
           });
       }
-      this.loadingSwitch();
-    },
-
-    loadingSwitch() {
-      this.loading = !this.loading;
+      this.loading = false;
     },
   },
 };

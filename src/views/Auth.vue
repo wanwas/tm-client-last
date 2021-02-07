@@ -47,12 +47,6 @@ export default {
       this.dialog = dialog;
     },
   },
-
-  mounted() {
-    if (this.$route.params.resetToken) {
-      this.switchCurrentForm("reset");
-    }
-  },
 };
 </script>
 
@@ -75,7 +69,8 @@ export default {
   align-items: center;
 }
 .form-error {
-  max-width: 300px;
+  max-width: 350px;
+  text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
