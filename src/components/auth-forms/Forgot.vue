@@ -31,7 +31,7 @@
     </form>
     <div class="form-control mt-3">
       <v-btn text tile small @click="$emit('switch-form', 'login')"
-        >Войти</v-btn
+        >Назад</v-btn
       >
     </div>
   </div>

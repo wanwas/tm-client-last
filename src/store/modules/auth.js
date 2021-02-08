@@ -43,6 +43,17 @@ export default {
       }
     },
 
+    async forgot(ctx, user) {
+      try {
+        const auth = firebase.auth();
+        auth.languageCode = "ru";
+        const res = await auth.sendPasswordResetEmail(user.email);
+        console.log(res);
+      } catch (e) {
+        return Promise.reject(getMessage(e.code));
+      }
+    },
+
     getUid() {
       const user = firebase.auth().currentUser;
       return user ? user.uid : null;

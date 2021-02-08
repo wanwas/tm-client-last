@@ -43,16 +43,12 @@
       >
     </form>
     <div class="form-control mt-3">
-      <!-- <v-btn text tile small @click="$emit('switch-form', 'forgot')"
+      <v-btn text tile small @click="$emit('switch-form', 'forgot')"
         >Забыли пароль?</v-btn
-      > -->
-      У вас нет аккаунта?
-      <v-btn
-        text
-        tile
-        small
-        class="primary--text"
-        @click="$emit('switch-form', 'register')"
+      >
+      <!-- У вас нет аккаунта? -->
+      <!-- class="primary--text" -->
+      <v-btn text tile small @click="$emit('switch-form', 'register')"
         >Зарегистрироваться</v-btn
       >
     </div>
