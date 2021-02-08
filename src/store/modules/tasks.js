@@ -16,6 +16,7 @@ export default {
         dispatch("getTasks", data);
       });
     },
+
     getTasks({ commit }, data) {
       if (data) {
         commit("tasksUpdated", Object.values(data));
@@ -23,14 +24,19 @@ export default {
         commit("tasksUpdated", []);
       }
     },
+
     async deleteTask({ dispatch }, id) {
       try {
         const uid = await dispatch("auth/getUid", null, { root: true });
-        await firebase.database().ref(`users/${uid}/tasks/${id}`);
+        await firebase
+          .database()
+          .ref(`users/${uid}/tasks/${id}`)
+          .remove();
       } catch (e) {
         return Promise.reject(e);
       }
     },
+
     async editTask({ dispatch }, data) {
       try {
         const uid = await dispatch("auth/getUid", null, { root: true });
@@ -44,6 +50,7 @@ export default {
         return Promise.reject(e);
       }
     },
+
     async addTask({ dispatch }, data) {
       try {
         const uid = await dispatch("auth/getUid", null, { root: true });

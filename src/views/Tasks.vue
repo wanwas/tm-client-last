@@ -25,9 +25,7 @@
                   dark
                   color="primary"
                 >
-                  <v-icon dark>
-                    mdi-plus
-                  </v-icon>
+                  <v-icon dark> mdi-plus </v-icon>
                 </v-btn>
               </template>
               <v-card>
@@ -80,9 +78,7 @@
                         dark
                         color="primary"
                       >
-                        <v-icon dark>
-                          mdi-plus
-                        </v-icon>
+                        <v-icon dark> mdi-plus </v-icon>
                       </v-btn>
                     </div>
                   </v-container>
@@ -90,7 +86,7 @@
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" text @click="dialog = false">
+                  <v-btn color="blue darken-1" text @click="closeDialog">
                     Close
                   </v-btn>
                   <v-btn color="blue darken-1" text @click="submit">
@@ -103,7 +99,11 @@
         </template>
       </v-card-title>
     </v-card>
-    <TasksList :tasks="uncompletedTasks" :search="search"></TasksList>
+    <TasksList
+      @open-edit-form="openEditForm"
+      :tasks="uncompletedTasks"
+      :search="search"
+    ></TasksList>
   </div>
 </template>
 
@@ -134,6 +134,7 @@ export default {
       task: "",
       description: "",
       subtasks: [],
+      id: null,
     };
   },
 
@@ -164,7 +165,25 @@ export default {
   methods: {
     ...mapActions({
       createTask: "tasks/addTask",
+      editTask: "tasks/editTask",
     }),
+
+    openEditForm(val) {
+      this.subtasks = val.subtasks.slice();
+      this.task = val.task;
+      this.description = val.description;
+      this.id = val.id;
+      this.dialog = true;
+    },
+
+    closeDialog() {
+      this.id = null;
+      this.task = "";
+      this.description = "";
+      this.subtasks = [];
+      this.$v.$reset();
+      this.dialog = false;
+    },
 
     submit() {
       this.$v.$touch();
@@ -174,12 +193,20 @@ export default {
         description: this.description,
         subtasks: this.subtasks,
         completed: false,
-        created: new Date(),
       };
-      this.createTask(data).catch((e) => {
-        console.log(e);
-      });
-      this.dialog = false;
+      if (this.id) {
+        data.id = this.id;
+        this.editTask(data).catch((e) => {
+          console.log(e);
+        });
+      } else {
+        data.created = new Date().toString();
+        console.log(data);
+        this.createTask(data).catch((e) => {
+          console.log(e);
+        });
+      }
+      this.closeDialog();
     },
 
     addSubtask() {

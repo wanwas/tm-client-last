@@ -37,6 +37,7 @@ export default {
             email: user.email,
             admin: false,
           });
+        await dispatch("logout");
       } catch (e) {
         return Promise.reject(getMessage(e.code));
       }
@@ -52,7 +53,7 @@ export default {
     },
   },
 
-  mutations: {  
+  mutations: {
     userUpdated(state, newUser) {
       state.user = newUser;
     },
