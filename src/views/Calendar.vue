@@ -23,7 +23,7 @@
             </template>
             <v-date-picker
               v-model="selectedDate"
-              @input="menu2 = false"
+              @input="menu = false"
             ></v-date-picker>
           </v-menu>
         </div>
@@ -36,91 +36,6 @@
           hide-details
           class="mr-10 ml-10"
         ></v-text-field>
-        <template>
-          <v-row justify="center">
-            <v-dialog v-model="dialog" persistent max-width="600px">
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  class="mx-2"
-                  v-bind="attrs"
-                  v-on="on"
-                  fab
-                  small
-                  dark
-                  color="primary"
-                >
-                  <v-icon dark> mdi-plus </v-icon>
-                </v-btn>
-              </template>
-              <v-card>
-                <v-card-title>
-                  <span class="headline">Новая задача</span>
-                </v-card-title>
-                <v-card-text>
-                  <v-container>
-                    <v-row>
-                      <v-text-field
-                        v-model="task"
-                        label="Название*"
-                        required
-                        :error-messages="taskErrors"
-                        @input="$v.task.$touch()"
-                        @blur="$v.task.$touch()"
-                      ></v-text-field>
-                    </v-row>
-                    <v-row>
-                      <v-textarea
-                        :counter="300"
-                        solo
-                        :error-messages="descriptionErrors"
-                        v-model="description"
-                        label="Описание"
-                        @input="$v.description.$touch()"
-                        @blur="$v.description.$touch()"
-                      ></v-textarea>
-                    </v-row>
-                    <div
-                      v-for="(item, index) in subtasks"
-                      :key="index"
-                      class="subtasks-list-create"
-                    >
-                      <div class="title mr-3">{{ index + 1 }}.</div>
-                      <v-text-field
-                        v-model="item.subtask"
-                        label="Подзадача"
-                        :append-icon="'mdi-delete'"
-                        @click:append="removeSubtask(index)"
-                      ></v-text-field>
-                    </div>
-                    <div class="add">
-                      <v-btn
-                        class="mx-2"
-                        @click="addSubtask"
-                        title="Добавить подзадачу"
-                        fab
-                        x-small
-                        dark
-                        color="primary"
-                      >
-                        <v-icon dark> mdi-plus </v-icon>
-                      </v-btn>
-                    </div>
-                  </v-container>
-                  <small>*отмечены обязательные поля</small>
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" text @click="closeDialog">
-                    Close
-                  </v-btn>
-                  <v-btn color="blue darken-1" text @click="submit">
-                    Save
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-row>
-        </template>
       </v-card-title>
     </v-card>
     <div class="blocks d-flex">

@@ -91,7 +91,7 @@ export default {
   data() {
     return {
       pageNumber: 0,
-      size: 10,
+      size: 7,
       currentItem: null,
       showMenu: false,
       x: 0,
