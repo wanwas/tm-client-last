@@ -2,7 +2,31 @@
   <div class="content pt-3 pb-3">
     <v-card>
       <v-card-title class="d-flex align-center justify-center">
-        <div class="headline">Список задач</div>
+        <div>
+          <v-container>
+            <v-row>
+              <v-menu
+                v-model="menu1"
+                :close-on-content-click="false"
+                max-width="290"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    :value="computedDateFormattedMomentjs"
+                    readonly
+                    v-bind="attrs"
+                    v-on="on"
+                    @click:clear="selectedDate = null"
+                  ></v-text-field>
+                </template>
+                <v-date-picker
+                  v-model="selectedDate"
+                  @change="menu1 = false"
+                ></v-date-picker>
+              </v-menu>
+            </v-row>
+          </v-container>
+        </div>
         <v-spacer></v-spacer>
         <v-text-field
           v-model="search"
@@ -101,7 +125,7 @@
     </v-card>
     <TasksList
       @open-edit-form="openEditForm"
-      :tasks="uncompletedTasks.reverse()"
+      :tasks="selectedTasks.reverse()"
       :search="search"
     ></TasksList>
   </div>
@@ -137,6 +161,8 @@ export default {
       description: "",
       subtasks: [],
       id: null,
+      selectedDate: new Date(),
+      menu1: false,
     };
   },
 
@@ -152,6 +178,12 @@ export default {
       return errors;
     },
 
+    computedDateFormattedMomentjs() {
+      return this.selectedDate
+        ? moment(this.selectedDate).format("dddd, MMMM Do YYYY")
+        : "";
+    },
+
     descriptionErrors() {
       const errors = [];
       if (!this.$v.description.$dirty) return errors;
@@ -160,8 +192,15 @@ export default {
       return errors;
     },
 
-    uncompletedTasks() {
-      return this.tasks.filter((el) => !el.completed);
+    selectedTasks() {
+      return this.tasks.filter((el) => {
+        if (
+          moment(new Date(el.date)).format("dddd, MMMM Do YYYY") ===
+          moment(this.selectedDate).format("dddd, MMMM Do YYYY")
+        ) {
+          return el;
+        }
+      });
     },
   },
   methods: {
@@ -202,7 +241,8 @@ export default {
           console.log(e);
         });
       } else {
-        data.created = moment(new Date()).format("dddd, MMMM Do YYYY");
+        data.created = new Date().toString();
+        data.date = new Date().toString();
         console.log(data);
         this.createTask(data).catch((e) => {
           console.log(e);

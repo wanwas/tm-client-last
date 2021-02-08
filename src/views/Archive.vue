@@ -14,7 +14,7 @@
         ></v-text-field>
       </v-card-title>
     </v-card>
-    <TasksList :tasks="completedTasks" :search="search"></TasksList>
+    <TasksList :tasks="completedTasks.reverse()" :search="search"></TasksList>
   </div>
 </template>
 

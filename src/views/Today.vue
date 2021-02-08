@@ -2,7 +2,16 @@
   <div class="content pt-3 pb-3">
     <v-card>
       <v-card-title class="d-flex align-center justify-center">
-        <div class="headline">Список задач</div>
+        <div class="headline">
+          Сегодня,
+          {{
+            new Date().toLocaleString("ru-Ru", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })
+          }}
+        </div>
         <v-spacer></v-spacer>
         <v-text-field
           v-model="search"
@@ -101,7 +110,7 @@
     </v-card>
     <TasksList
       @open-edit-form="openEditForm"
-      :tasks="uncompletedTasks.reverse()"
+      :tasks="todayTasks.reverse()"
       :search="search"
     ></TasksList>
   </div>
@@ -160,8 +169,15 @@ export default {
       return errors;
     },
 
-    uncompletedTasks() {
-      return this.tasks.filter((el) => !el.completed);
+    todayTasks() {
+      return this.tasks.filter((el) => {
+        if (
+          moment(new Date(el.date)).format("dddd, MMMM Do YYYY") ===
+          moment(new Date()).format("dddd, MMMM Do YYYY")
+        ) {
+          return el;
+        }
+      });
     },
   },
   methods: {
@@ -203,6 +219,7 @@ export default {
         });
       } else {
         data.created = moment(new Date()).format("dddd, MMMM Do YYYY");
+        data.date = moment(new Date()).format("dddd, MMMM Do YYYY");
         console.log(data);
         this.createTask(data).catch((e) => {
           console.log(e);

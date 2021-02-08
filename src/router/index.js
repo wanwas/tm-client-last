@@ -37,6 +37,14 @@ const routes = [
         path: "archive",
         component: () => import("@/views/Archive"),
       },
+      {
+        path: "today",
+        component: () => import("@/views/Today"),
+      },
+      {
+        path: "calendar",
+        component: () => import("@/views/Calendar"),
+      },
     ],
   },
 ];

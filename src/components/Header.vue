@@ -13,6 +13,26 @@
         tile
         height="60px"
         text
+        to="/main/today"
+      >
+        Сегодня
+        <v-icon class="ml-2">mdi-calendar-outline</v-icon>
+      </v-btn>
+      <v-btn
+        class="btn primary white-text"
+        tile
+        height="60px"
+        text
+        to="/main/calendar"
+      >
+        Календарь
+        <v-icon class="ml-2">mdi-calendar-multiselect</v-icon>
+      </v-btn>
+      <v-btn
+        class="btn primary white-text"
+        tile
+        height="60px"
+        text
         to="/main/tasks"
       >
         Список задач
