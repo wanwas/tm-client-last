@@ -3,29 +3,29 @@
     <v-card>
       <v-card-title class="d-flex align-center justify-center">
         <div>
-          <v-container>
-            <v-row>
-              <v-menu
-                v-model="menu1"
-                :close-on-content-click="false"
-                max-width="290"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-text-field
-                    :value="computedDateFormattedMomentjs"
-                    readonly
-                    v-bind="attrs"
-                    v-on="on"
-                    @click:clear="selectedDate = null"
-                  ></v-text-field>
-                </template>
-                <v-date-picker
-                  v-model="selectedDate"
-                  @change="menu1 = false"
-                ></v-date-picker>
-              </v-menu>
-            </v-row>
-          </v-container>
+          <v-menu
+            v-model="menu"
+            :close-on-content-click="false"
+            :nudge-right="40"
+            transition="scale-transition"
+            offset-y
+            min-width="auto"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field
+                v-model="selectedDate"
+                label="Picker without buttons"
+                prepend-icon="mdi-calendar"
+                readonly
+                v-bind="attrs"
+                v-on="on"
+              ></v-text-field>
+            </template>
+            <v-date-picker
+              v-model="selectedDate"
+              @input="menu2 = false"
+            ></v-date-picker>
+          </v-menu>
         </div>
         <v-spacer></v-spacer>
         <v-text-field
@@ -123,11 +123,25 @@
         </template>
       </v-card-title>
     </v-card>
-    <TasksList
-      @open-edit-form="openEditForm"
-      :tasks="selectedTasks.reverse()"
-      :search="search"
-    ></TasksList>
+    <div class="blocks d-flex">
+      <div class="block">
+        <TasksList
+          @open-edit-form="openEditForm"
+          :tasks="selectedTasks.reverse()"
+          :search="search"
+          :flagReturn="true"
+        ></TasksList>
+      </div>
+      <div class="block">
+        <TasksList
+          @open-edit-form="openEditForm"
+          :tasks="uncompletedTasks.reverse()"
+          :search="search"
+          :flagEnter="true"
+          :selectedDate="selectedDate"
+        ></TasksList>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -138,8 +152,6 @@ import { mapActions, mapGetters } from "vuex";
 
 import { validationMixin } from "vuelidate";
 import { required, maxLength } from "vuelidate/lib/validators";
-
-import moment from "moment";
 
 export default {
   components: {
@@ -160,9 +172,8 @@ export default {
       task: "",
       description: "",
       subtasks: [],
-      id: null,
-      selectedDate: new Date(),
-      menu1: false,
+      menu: false,
+      selectedDate: new Date().toISOString().substr(0, 10),
     };
   },
 
@@ -178,12 +189,6 @@ export default {
       return errors;
     },
 
-    computedDateFormattedMomentjs() {
-      return this.selectedDate
-        ? moment(this.selectedDate).format("dddd, MMMM Do YYYY")
-        : "";
-    },
-
     descriptionErrors() {
       const errors = [];
       if (!this.$v.description.$dirty) return errors;
@@ -195,11 +200,16 @@ export default {
     selectedTasks() {
       return this.tasks.filter((el) => {
         if (
-          moment(new Date(el.date)).format("dddd, MMMM Do YYYY") ===
-          moment(this.selectedDate).format("dddd, MMMM Do YYYY")
+          new Date(el.date).setHours(0, 0, 0, 0) ===
+          new Date(this.selectedDate).setHours(0, 0, 0, 0)
         ) {
           return el;
         }
+      });
+    },
+    uncompletedTasks() {
+      return this.tasks.filter((el) => {
+        if (!el.completed && !el.date) return el;
       });
     },
   },
@@ -282,5 +292,14 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+.blocks {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  .block {
+    width: 45%;
+  }
 }
 </style>

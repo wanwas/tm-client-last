@@ -124,8 +124,6 @@ import { mapActions, mapGetters } from "vuex";
 import { validationMixin } from "vuelidate";
 import { required, maxLength } from "vuelidate/lib/validators";
 
-import moment from "moment";
-
 export default {
   components: {
     TasksList,
@@ -172,8 +170,8 @@ export default {
     todayTasks() {
       return this.tasks.filter((el) => {
         if (
-          moment(new Date(el.date)).format("dddd, MMMM Do YYYY") ===
-          moment(new Date()).format("dddd, MMMM Do YYYY")
+          new Date(el.date).setHours(0, 0, 0, 0) ===
+          new Date().setHours(0, 0, 0, 0)
         ) {
           return el;
         }
@@ -218,8 +216,8 @@ export default {
           console.log(e);
         });
       } else {
-        data.created = moment(new Date()).format("dddd, MMMM Do YYYY");
-        data.date = moment(new Date()).format("dddd, MMMM Do YYYY");
+        data.created = new Date().toString();
+        data.date = new Date().toString();
         console.log(data);
         this.createTask(data).catch((e) => {
           console.log(e);

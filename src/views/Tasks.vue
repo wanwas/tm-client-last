@@ -115,8 +115,6 @@ import { mapActions, mapGetters } from "vuex";
 import { validationMixin } from "vuelidate";
 import { required, maxLength } from "vuelidate/lib/validators";
 
-import moment from "moment";
-
 export default {
   components: {
     TasksList,
@@ -202,7 +200,7 @@ export default {
           console.log(e);
         });
       } else {
-        data.created = moment(new Date()).format("dddd, MMMM Do YYYY");
+        data.created = new Date().toString();
         console.log(data);
         this.createTask(data).catch((e) => {
           console.log(e);

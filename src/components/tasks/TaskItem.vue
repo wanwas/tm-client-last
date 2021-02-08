@@ -30,6 +30,22 @@
         ></SubtasksList>
       </div>
     </div>
+    <v-btn
+      icon
+      x-large
+      class="flag-move move-left"
+      @click="$emit('remove-date', item)"
+      v-if="flagReturn"
+      ><v-icon>mdi-chevron-right</v-icon></v-btn
+    >
+    <v-btn
+      icon
+      x-large
+      class="flag-move move-rigth"
+      @click="$emit('set-date', item)"
+      v-if="flagEnter"
+      ><v-icon>mdi-chevron-left</v-icon></v-btn
+    >
   </div>
 </template>
 
@@ -37,9 +53,9 @@
 import SubtasksList from "@/components/tasks/SubtasksList";
 
 export default {
-  props: ["item"],
+  props: ["item", "flagEnter", "flagReturn"],
 
-  emits: ["edit-task", "delete"],
+  emits: ["edit-task", "delete", "remove-date", "set-date"],
 
   components: {
     SubtasksList,
@@ -175,5 +191,14 @@ export default {
 }
 .custom-checkbox:disabled + label::before {
   background-color: #e9ecef;
+}
+.flag-move {
+  position: absolute;
+}
+.move-left {
+  left: 615px;
+}
+.move-rigth {
+  left: -37px;
 }
 </style>

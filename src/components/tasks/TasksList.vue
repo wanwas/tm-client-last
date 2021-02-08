@@ -8,11 +8,16 @@
           :item="item"
           :key="item.id"
           @show="show"
+          :flagReturn="flagReturn"
+          :flagEnter="flagEnter"
+          @set-date="setDate"
+          @remove-date="removeDate"
         ></TaskItem>
         <div class="mt-3 mr-3 d-flex align-center justify-space-between">
           <div class="d-flex caption text--secondary ml-3">
-            Всего в списке <div class="primary--text mr-1 ml-1">{{ tasks.length }}</div>
-            </div>
+            Всего в списке
+            <div class="primary--text mr-1 ml-1">{{ tasks.length }}</div>
+          </div>
           <div class="d-flex align-center justify-center">
             <v-btn @click="prevPage" :disabled="pageNumber == 0" icon>
               <v-icon>mdi-chevron-left</v-icon>
@@ -81,7 +86,7 @@ export default {
     TaskItem,
   },
 
-  props: ["tasks", "search"],
+  props: ["tasks", "search", "flagReturn", "flagEnter", "selectedDate"],
 
   data() {
     return {
@@ -135,6 +140,25 @@ export default {
         console.log(e);
       });
       this.confirmDialog = false;
+    },
+
+    async setDate(item) {
+      try {
+        console.log(item);
+        item.date = this.selectedDate;
+        await this.editTask(item);
+      } catch (e) {
+        console.log(e);
+      }
+    },
+
+    async removeDate(item) {
+      try {
+        item.date = "";
+        await this.editTask(item);
+      } catch (e) {
+        console.log(e);
+      }
     },
 
     show({ e, item }) {
